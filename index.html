@@ -10,7 +10,6 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
     <style>
         :root { 
@@ -24,25 +23,11 @@
             margin: 0; 
             color: #1e293b;
         }
-        .safe-pt { padding-top: var(--sat); }
-        .safe-pb { padding-bottom: var(--sab); }
-        
         @keyframes slideUp { 
             from { opacity: 0; transform: translateY(20px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
         .animate-in { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-        }
-
-        .step-active {
-            box-shadow: 0 0 0 2px #4f46e5, 0 10px 15px -3px rgba(79, 70, 229, 0.2);
-        }
     </style>
 
     <script type="importmap">
@@ -59,21 +44,5 @@
 </head>
 <body>
     <div id="root"></div>
-    
-    <script type="text/babel" data-type="module">
-        import React from 'react';
-        import ReactDOM from 'react-dom/client';
-        import App from './App.tsx';
-
-        const rootElement = document.getElementById('root');
-        if (rootElement) {
-            const root = ReactDOM.createRoot(rootElement);
-            root.render(
-                <React.StrictMode>
-                    <App />
-                </React.StrictMode>
-            );
-        }
-    </script>
 </body>
 </html>
