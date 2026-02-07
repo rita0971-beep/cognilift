@@ -54,7 +54,7 @@ const App: React.FC = () => {
       });
     } catch (e: any) {
       console.error(e);
-      alert("文章生成失敗，請檢查 API Key 設置或網路連接。");
+      alert("文章生成失敗，請檢查 API Key 設置或網路環境。");
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ const App: React.FC = () => {
       return (
         <div className="flex-1 flex flex-col items-center justify-center p-12">
           <div className="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full mb-4"></div>
-          <p className="text-slate-500 font-medium">AI 正在為你準備深度閱讀材料...</p>
+          <p className="text-slate-500 font-medium">AI 正在從「底層邏輯」為你準備材料...</p>
         </div>
       );
     }
@@ -106,13 +106,13 @@ const App: React.FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">準備好提升認知能力了嗎？</h2>
-        <p className="text-slate-500 mb-8 max-w-sm">透過結構化訓練，我們將幫你從「執行聽」轉向「邏輯聽」。</p>
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">打破「表面聽」的習慣</h2>
+        <p className="text-slate-500 mb-8 max-w-sm">我們將生成一篇具備深度的文章，引導你進行結構化拆解訓練。</p>
         <button 
           onClick={startNewSession}
           className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95"
         >
-          開始今日訓練
+          開始提升認知深度
         </button>
       </div>
     );
@@ -143,11 +143,11 @@ const App: React.FC = () => {
                   className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none min-h-[100px]"
                   value={answers.problemSolved}
                   onChange={e => setAnswers({...answers, problemSolved: e.target.value})}
-                  placeholder="請描述你認知的核心議題..."
+                  placeholder="試著找出作者最想解決的那個痛點..."
                 />
               </label>
               <div>
-                <span className="text-sm font-semibold text-slate-600 mb-2 block">關鍵論點 / 結構</span>
+                <span className="text-sm font-semibold text-slate-600 mb-2 block">關鍵論點支柱</span>
                 {answers.logicStructures.map((ls, i) => (
                   <input 
                     key={i}
@@ -169,8 +169,8 @@ const App: React.FC = () => {
       case 'retell':
         return (
           <div className="space-y-6 animate-in">
-            <h2 className="text-2xl font-bold text-slate-800">費曼技巧：直白複述</h2>
-            <p className="text-slate-500">不看文章，試著用最簡單的語言複述給別人聽。</p>
+            <h2 className="text-2xl font-bold text-slate-800">直白複述（費曼學習法）</h2>
+            <p className="text-slate-500">不看文章，試著用最白話的方式解釋一遍給你的朋友聽。</p>
             <textarea 
               className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none min-h-[200px]"
               value={answers.retellSummary}
@@ -183,7 +183,7 @@ const App: React.FC = () => {
         return (
           <div className="space-y-6 animate-in">
             <h2 className="text-2xl font-bold text-slate-800">批判性提問</h2>
-            <p className="text-slate-500">提出兩個你對文中內容的疑問或想進一步探討的方向。</p>
+            <p className="text-slate-500">拒絕「執行聽」。提出兩個你對文中內容的深度疑問。</p>
             {answers.questions.map((q, i) => (
               <input 
                 key={i}
@@ -204,27 +204,27 @@ const App: React.FC = () => {
         if (!feedback) return (
           <div className="flex flex-col items-center justify-center p-12">
             <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full mb-4"></div>
-            <p className="text-slate-500">AI 教練正在評估你的認知深度...</p>
+            <p className="text-slate-500">AI 教練正在解析你的理解程度...</p>
           </div>
         );
         return (
           <div className="space-y-8 animate-in">
             <div className="bg-indigo-600 rounded-3xl p-8 text-white text-center shadow-xl">
-              <div className="text-sm font-medium opacity-80 mb-2 tracking-widest uppercase">認知深度評分</div>
+              <div className="text-sm font-medium opacity-80 mb-2 tracking-widest uppercase">認知深度分</div>
               <div className="text-7xl font-black mb-4">{feedback.score}</div>
               <div className="text-lg opacity-90">{feedback.improvementTip}</div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-white p-6 rounded-2xl border border-slate-100">
+              <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                 <h4 className="font-bold text-slate-800 mb-2 text-sm">邏輯分析</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">{feedback.logicFeedback}</p>
               </div>
-              <div className="bg-white p-6 rounded-2xl border border-slate-100">
+              <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                 <h4 className="font-bold text-slate-800 mb-2 text-sm">複述表達</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">{feedback.summaryFeedback}</p>
               </div>
-              <div className="bg-white p-6 rounded-2xl border border-slate-100">
+              <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                 <h4 className="font-bold text-slate-800 mb-2 text-sm">批判提問</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">{feedback.questioningFeedback}</p>
               </div>
@@ -232,9 +232,9 @@ const App: React.FC = () => {
             
             <button 
               onClick={() => { setArticle(null); setCurrentStep(0); }}
-              className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-colors"
+              className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-colors shadow-lg"
             >
-              完成今日訓練
+              完成今日訓練，明天再來
             </button>
           </div>
         );
@@ -251,11 +251,11 @@ const App: React.FC = () => {
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <span className="font-bold text-lg text-slate-800">CogniLift</span>
+            <span className="font-bold text-lg text-slate-800 tracking-tight">CogniLift</span>
           </div>
-          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg">
-            <button onClick={() => setView('exercise')} className={`px-4 py-1.5 rounded-md text-sm font-bold ${view === 'exercise' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}>訓練</button>
-            <button onClick={() => setView('history')} className={`px-4 py-1.5 rounded-md text-sm font-bold ${view === 'history' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}>成長</button>
+          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl">
+            <button onClick={() => setView('exercise')} className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${view === 'exercise' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>今日訓練</button>
+            <button onClick={() => setView('history')} className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${view === 'history' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>成長記錄</button>
           </div>
         </div>
       </nav>
@@ -264,16 +264,17 @@ const App: React.FC = () => {
         {view === 'exercise' ? (
           <>
             {article && <ProgressBar steps={STEPS} currentStepIndex={currentStep} />}
-            <div className="bg-white rounded-[2rem] p-8 md:p-12 border border-slate-100 shadow-sm min-h-[400px]">
+            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-100 shadow-sm min-h-[400px]">
               {renderStep()}
               {article && currentStep < STEPS.length - 1 && (
                 <div className="mt-12 flex justify-end">
                   <button 
                     onClick={handleNext}
                     disabled={loading}
-                    className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 transition-all disabled:opacity-50"
+                    className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 transition-all disabled:opacity-50 flex items-center gap-2"
                   >
-                    {loading ? '思考中...' : '下一步'}
+                    {loading ? 'AI 教練思考中...' : '下一步'}
+                    {!loading && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7-7 7M5 12h16"/></svg>}
                   </button>
                 </div>
               )}
@@ -287,10 +288,10 @@ const App: React.FC = () => {
             </div>
             <div className="space-y-4">
               {history.length === 0 ? (
-                <p className="text-center text-slate-400 py-12">尚無訓練記錄</p>
+                <p className="text-center text-slate-400 py-12">開始你的第一次訓練，記錄將會出現在這裡。</p>
               ) : (
                 history.map(record => (
-                  <div key={record.id} className="bg-white p-6 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm">
+                  <div key={record.id} className="bg-white p-6 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm hover:border-indigo-200 transition-colors">
                     <div>
                       <div className="text-xs text-slate-400 mb-1">{new Date(record.timestamp).toLocaleDateString()}</div>
                       <div className="font-bold text-slate-800">{record.article.title}</div>
