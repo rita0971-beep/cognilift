@@ -33,7 +33,9 @@ const App: React.FC = () => {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setHistory(parsed);
-      } catch (e) { console.error("Failed to load history", e); }
+      } catch (e) {
+        console.error("Failed to load history", e);
+      }
     }
   }, []);
 
@@ -51,7 +53,8 @@ const App: React.FC = () => {
         questions: ['', '']
       });
     } catch (e: any) {
-      alert("載入失敗: " + e.message);
+      console.error(e);
+      alert("文章生成失敗，請檢查 API Key 設置或網路連接。");
     } finally {
       setLoading(false);
     }
@@ -87,6 +90,15 @@ const App: React.FC = () => {
   };
 
   const renderStep = () => {
+    if (loading && !article) {
+      return (
+        <div className="flex-1 flex flex-col items-center justify-center p-12">
+          <div className="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full mb-4"></div>
+          <p className="text-slate-500 font-medium">AI 正在為你準備深度閱讀材料...</p>
+        </div>
+      );
+    }
+
     if (!article) return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-in">
         <div className="w-20 h-20 bg-indigo-100 rounded-3xl flex items-center justify-center text-indigo-600 mb-6">
@@ -95,13 +107,12 @@ const App: React.FC = () => {
           </svg>
         </div>
         <h2 className="text-2xl font-bold text-slate-800 mb-2">準備好提升認知能力了嗎？</h2>
-        <p className="text-slate-500 mb-8 max-w-sm">我們將透過結構化訓練，幫助你從「聽表面」進化到「聽邏輯」。</p>
+        <p className="text-slate-500 mb-8 max-w-sm">透過結構化訓練，我們將幫你從「執行聽」轉向「邏輯聽」。</p>
         <button 
           onClick={startNewSession}
-          disabled={loading}
-          className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95 disabled:opacity-50"
+          className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95"
         >
-          {loading ? '思考中...' : '開始今日訓練'}
+          開始今日訓練
         </button>
       </div>
     );
@@ -159,7 +170,7 @@ const App: React.FC = () => {
         return (
           <div className="space-y-6 animate-in">
             <h2 className="text-2xl font-bold text-slate-800">費曼技巧：直白複述</h2>
-            <p className="text-slate-500">用最簡單的語言總結這篇文章，確保連五歲小孩都能聽懂。</p>
+            <p className="text-slate-500">不看文章，試著用最簡單的語言複述給別人聽。</p>
             <textarea 
               className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none min-h-[200px]"
               value={answers.retellSummary}
@@ -172,7 +183,7 @@ const App: React.FC = () => {
         return (
           <div className="space-y-6 animate-in">
             <h2 className="text-2xl font-bold text-slate-800">批判性提問</h2>
-            <p className="text-slate-500">不只是執行，更要思考。針對文章內容提出兩個具備質疑性的問題。</p>
+            <p className="text-slate-500">提出兩個你對文中內容的疑問或想進一步探討的方向。</p>
             {answers.questions.map((q, i) => (
               <input 
                 key={i}
@@ -190,27 +201,32 @@ const App: React.FC = () => {
           </div>
         );
       case 'feedback':
-        if (!feedback) return <div className="flex justify-center p-12"><div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div></div>;
+        if (!feedback) return (
+          <div className="flex flex-col items-center justify-center p-12">
+            <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full mb-4"></div>
+            <p className="text-slate-500">AI 教練正在評估你的認知深度...</p>
+          </div>
+        );
         return (
           <div className="space-y-8 animate-in">
             <div className="bg-indigo-600 rounded-3xl p-8 text-white text-center shadow-xl">
-              <div className="text-sm font-medium opacity-80 mb-2 tracking-widest uppercase">訓練評分</div>
+              <div className="text-sm font-medium opacity-80 mb-2 tracking-widest uppercase">認知深度評分</div>
               <div className="text-7xl font-black mb-4">{feedback.score}</div>
               <div className="text-lg opacity-90">{feedback.improvementTip}</div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-white p-6 rounded-2xl border border-slate-100">
-                <h4 className="font-bold text-slate-800 mb-2">邏輯分析</h4>
-                <p className="text-sm text-slate-600">{feedback.logicFeedback}</p>
+                <h4 className="font-bold text-slate-800 mb-2 text-sm">邏輯分析</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{feedback.logicFeedback}</p>
               </div>
               <div className="bg-white p-6 rounded-2xl border border-slate-100">
-                <h4 className="font-bold text-slate-800 mb-2">複述表達</h4>
-                <p className="text-sm text-slate-600">{feedback.summaryFeedback}</p>
+                <h4 className="font-bold text-slate-800 mb-2 text-sm">複述表達</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{feedback.summaryFeedback}</p>
               </div>
               <div className="bg-white p-6 rounded-2xl border border-slate-100">
-                <h4 className="font-bold text-slate-800 mb-2">批判提問</h4>
-                <p className="text-sm text-slate-600">{feedback.questioningFeedback}</p>
+                <h4 className="font-bold text-slate-800 mb-2 text-sm">批判提問</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{feedback.questioningFeedback}</p>
               </div>
             </div>
             
@@ -239,7 +255,7 @@ const App: React.FC = () => {
           </div>
           <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg">
             <button onClick={() => setView('exercise')} className={`px-4 py-1.5 rounded-md text-sm font-bold ${view === 'exercise' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}>訓練</button>
-            <button onClick={() => setView('history')} className={`px-4 py-1.5 rounded-md text-sm font-bold ${view === 'history' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}>記錄</button>
+            <button onClick={() => setView('history')} className={`px-4 py-1.5 rounded-md text-sm font-bold ${view === 'history' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}>成長</button>
           </div>
         </div>
       </nav>
@@ -257,7 +273,7 @@ const App: React.FC = () => {
                     disabled={loading}
                     className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 transition-all disabled:opacity-50"
                   >
-                    {loading ? '計算中...' : '下一步'}
+                    {loading ? '思考中...' : '下一步'}
                   </button>
                 </div>
               )}
@@ -265,20 +281,24 @@ const App: React.FC = () => {
           </>
         ) : (
           <div className="space-y-8 animate-in">
-            <div className="bg-white p-8 rounded-3xl border border-slate-100">
-              <h2 className="text-xl font-bold text-slate-800 mb-6">訓練趨勢</h2>
+            <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">訓練趨勢</h2>
               <ScoreChart records={history} />
             </div>
             <div className="space-y-4">
-              {history.map(record => (
-                <div key={record.id} className="bg-white p-6 rounded-2xl border border-slate-100 flex justify-between items-center">
-                  <div>
-                    <div className="text-xs text-slate-400 mb-1">{new Date(record.timestamp).toLocaleDateString()}</div>
-                    <div className="font-bold text-slate-800">{record.article.title}</div>
+              {history.length === 0 ? (
+                <p className="text-center text-slate-400 py-12">尚無訓練記錄</p>
+              ) : (
+                history.map(record => (
+                  <div key={record.id} className="bg-white p-6 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm">
+                    <div>
+                      <div className="text-xs text-slate-400 mb-1">{new Date(record.timestamp).toLocaleDateString()}</div>
+                      <div className="font-bold text-slate-800">{record.article.title}</div>
+                    </div>
+                    <div className="text-2xl font-black text-indigo-600">{record.feedback.score}</div>
                   </div>
-                  <div className="text-2xl font-black text-indigo-600">{record.feedback.score}</div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         )}
