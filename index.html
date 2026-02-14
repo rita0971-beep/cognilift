@@ -10,21 +10,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     
     <script>
-        // 初始化全域變數
+        // 初始化全域環境變數
         window.process = { env: { API_KEY: "" } };
         
+        // 增強型錯誤補捉
         window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error("CogniLift 啟動錯誤:", msg);
+            console.error("CogniLift 啟動錯誤:", msg, error);
             const root = document.getElementById('root');
-            if (root && root.querySelector('.spinner')) {
+            if (root) {
                 root.innerHTML = `
-                    <div style="padding: 2rem; text-align: center; font-family: sans-serif;">
-                        <h2 style="color: #ef4444;">系統初始化失敗</h2>
-                        <p style="color: #64748b;">${msg}</p>
-                        <button onclick="window.location.reload()" style="margin-top: 1rem; background: #4f46e5; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer;">重試</button>
+                    <div style="padding: 40px; text-align: center; font-family: sans-serif; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 12px; margin: 20px;">
+                        <h2 style="color: #c53030; margin-bottom: 8px;">系統載入失敗</h2>
+                        <p style="color: #742a2a; font-size: 14px;">${msg}</p>
+                        <button onclick="window.location.reload()" style="margin-top: 16px; background: #4a5568; color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer;">立即重試</button>
                     </div>
                 `;
             }
+            return false;
         };
     </script>
 
@@ -41,15 +43,16 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            background: #f8fafc;
         }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .spinner {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border: 4px solid #e2e8f0;
-            border-top-color: #6366f1;
+            border-top-color: #4f46e5;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             margin-bottom: 1.5rem;
         }
     </style>
@@ -61,8 +64,8 @@
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "@google/genai": "https://esm.sh/@google/genai@1.3.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
   }
 }
 </script>
@@ -71,10 +74,9 @@
     <div id="root">
         <div class="loading-screen text-slate-400">
             <div class="spinner"></div>
-            <p style="font-weight: 500; color: #64748b;">正在載入 CogniLift 核心...</p>
+            <p style="font-weight: 600; color: #475569; letter-spacing: 0.05em;">正在連接 CogniLift 神經網路...</p>
         </div>
     </div>
-    <!-- 核心修正：必須明確引用入口點，否則瀏覽器不會執行 React 代碼 -->
-    <script type="module" src="./index.tsx"></script>
+    <!-- 注意：不要在這裡手動添加 index.tsx 的 script 標籤，平台會自動處理 -->
 </body>
 </html>
